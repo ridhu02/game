@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)http://127.0.0.1:5500/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   <style>
+    *{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+h1{
+    background-color: #081b31;
+    color: #fff;
+    height: 5rem;
+    
+    line-height: 5rem;
+}
+.choice{
+    height:200px;
+    width: 200px;
+
+}
+
+.choice:hover{
+    opacity: 0.5;
+    cursor: pointer;
+}
+img{
+    height:150px;
+    width: 150px;
+    border-radius:50%;
+    object-fit: cover;
+}
+.choices{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5rem;
+}
+.score_board{
+ display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    margin-top: 5rem;
+    gap: 5rem;
+}
+
+.msg_container{
+    background-color: #081b31;
+    color: #fff;
+     margin-top: 3rem;
+     font-size: 2rem;
+     display: inline-block;
+     padding: 0.8rem;
+     border-radius: 1rem;
+}
+
+@media (max-width: 768px){
+    body{
+        background-color: lightblue;
+    }
+}
+   </style>
+</head>
+<body>
+<h1>ROCK PAPER SCISSOR</h1>
+<div class="choices">
+    <div class="choice" id="rock">
+        <img src="./index_files/rock.png">
+    </div>
+    <div class="choice" id="paper">
+        <img src="./index_files/paper.png">
+    </div>
+    <div class="choice" id="scissor">
+        <img src="./index_files/scissors.png">
+    </div>
+</div>
+
+<div class="score_board">
+    <div class="score">
+<p id="user_score">0</p>
+<p>You</p>
+    </div>
+
+     <div class="score">
+<p id="comp_score">0</p>
+<p>Computer</p>
+    </div>
+</div>
+
+<div class="msg_container">
+    <p id="msg">Play your move</p>
+</div>
+
+
+<script>
+    let userscore=0;
+let compscore=0;
+
+const choice= document.querySelectorAll(".choice");
+const msg= document.querySelector("#msg");
+const userScorePera= document.querySelector("#user_score");
+const compScorePera= document.querySelector("#comp_score");
+
+
+
+const getCompChoice = ()=> {
+   const options=["rock" ,"paper", "scissor" ];
+   const randIDX= Math.floor(Math.random()*3);
+   return options[randIDX];
+};
+
+const drawGame=()=>{
+  console.log("Game was draw, try again.");
+  msg.innerText= "Game was Draw. Try again";
+  msg.style.backgroundColor = "black";
+};
+
+const playgame = (userchoice)=> {
+    console.log("userchoice=", userchoice);
+    //Generate computer choice
+    const compChoice= getCompChoice();
+     console.log("Computer choice=", compChoice);
+
+     if(userchoice== compChoice){
+       drawGame();
+     }else{
+        let userwin= true;
+        if(userchoice== "rock"){
+            //paper, scissor
+            userwin= compChoice=="paper" ? false : true;
+        }
+        else if(userchoice== "paper"){
+            //paper, scissor
+            userwin= compChoice=="scissor" ? false : true;
+     }
+     else{ 
+        userwin= compChoice=="rock" ? false : true;
+     }
+
+     const showWinner= (userwin, userchoice, compChoice)=>{
+        if(userwin){
+            userscore++;
+            userScorePera.innerText= userscore;
+            console.log("You win");
+            msg.innerText= `You win! your ${userchoice} beats ${compChoice}`;
+             msg.style.backgroundColor="green";
+        }
+        else{
+            compscore++;
+            compScorePera.innerText= compscore;
+             console.log("You lose");
+            msg.innerText= "You lose", msg.innerText= `You lose! ${compChoice} beats your ${userchoice}`;
+            msg.style.backgroundColor="red";
+
+        }
+     };
+     showWinner(userwin, userchoice, compChoice);
+    }
+
+}; 
+choice.forEach((choice)=> {
+    console.log(choice);
+    choice.addEventListener("click", () =>{
+        const userchoice= choice.getAttribute("id");
+       // console.log("Choice was clicked", userchoice);
+       playgame(userchoice);
+
+    });
+});
+
+</script>
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+</body></html>
